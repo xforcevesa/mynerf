@@ -58,13 +58,17 @@ Secondly, they're processed using [certain time series transformation](https://g
 
 Thirdly, they are made into several batches.
 
+> That is, we divide them into several ```batch_size*in_chuck_len```-length sequences, and reshape them.
+
+Finally, it performs pre-training processes. It makes every one of fields into several sample dictionary, as seen [here](adapter).
+
 ## Training and Prediction Time
 
 The ```Transformer``` model can be found [here](https://github.com/PaddlePaddle/PaddleTS/blob/fa1f6b25a857c4ca611f536894ca7bd020824bec/paddlets/models/forecasting/dl/transformer.py#L205).
 
 > Transformer model does not actually use ```static_cov```, but it could have different usage in different models.
 
-It actually ```concat``` the ```target```, ```observed_cov```*if any*, and ```known_cov```*if any* as input.
+It actually ```concat``` the ```target```, ```observed_cov```*if any*, and ```known_cov```*if any* as input, using function ```concat(axis=-1)```
 
 The shapes  are as follows:
 
@@ -80,3 +84,5 @@ In which:
 | :-: | :-: |
 | target_dim | len(target_cols) + len(known_cov_cols) |
 | n_target_cols | len(target_cols) |
+
+This Transformer is in Encoder-Decoder mode, except for absence of mask. The src and tgt are inputs to Encoder and Decoder respectively, and finally we obtain output representing the predicted targets.
