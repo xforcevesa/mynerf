@@ -82,7 +82,7 @@ In which:
 
 | Symbols | Values |
 | :-: | :-: |
-| target_dim | len(target_cols) + len(known_cov_cols) |
+| target_dim | len(target_cols) + len(observed_cov_cols) + len(known_cov_cols) |
 | n_target_cols | len(target_cols) |
 
 This Transformer is in Encoder-Decoder mode, except for absence of mask. The src and tgt are inputs to Encoder and Decoder respectively, and finally we obtain output representing the predicted targets.
