@@ -16,9 +16,9 @@ def load_data(csv_path: str):
     return TSDataset.load_from_csv(
         filepath_or_buffer=csv_path,
         # Custom your own fields here
-        observed_cov_cols=['fj_activePower', 'fj_windDirection', 'cft_ws10', 'cft_wd10', 'cft_ws50', 'cft_wd50',
-        'cft_wsHubHeight', 'cft_t8', 'cft_p8'],
-        target_cols=['fj_windSpeed'],
+        observed_cov_cols=['fj_activePower', 'fj_windDirection', 'cft_ws10', 'cft_wd10', 'cft_ws50',
+                           'cft_wd50', 'cft_wsHubHeight', 'cft_t8', 'cft_p8'],
+        target_cols='fj_windSpeed',
         time_col='date'
     )
 
@@ -31,10 +31,11 @@ def main():
     )
     dataset.plot()
     plt.show()
-    model = forecasting.TFTModel(
-        in_chunk_len=99,
-        out_chunk_len=23,
-        max_epochs=1000
+    model = forecasting.TransformerModel(
+        # Here can be customized
+        in_chunk_len=50,
+        out_chunk_len=5,
+        max_epochs=100
     )
     model.fit(dataset)
     model.save('model.pt')
@@ -42,6 +43,12 @@ def main():
 
 if __name__ == '__main__':
     main()
+```
+
+To run this baseline, create and activate a python 3.7 venv or conda env, and run the following command to install requirements:
+
+```bash
+pip install paddlepaddle-gpu==2.4.0rc0 paddlets[all]
 ```
 
 With the source code modified and debug, we learnt about how it works.
